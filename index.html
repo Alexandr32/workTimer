@@ -7,81 +7,93 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <script type="text/javascript" src="vanilla-tilt.js"></script>
 </head>
 <body>
 
-<div class="text-label">
-    До конца рабочего дня осталось:
-</div>
-
-<div class="time">
-
-    <div class="circle">
-        <div id="hour" class="title">
-            00
-        </div>
-        <div class="name">
-            Часы
-        </div>
-
-        <div class="dots hh-dot dot-red"></div>
-
-        <svg  height='100%' width='100%' class="svg">
-            <circle cx="100" cy="100" r="70"></circle>
-        </svg>
-
-        <svg  height='100%' width='100%' class="svg red" id="hh-line">
-            <circle cx="100" cy="100" r="70"></circle>
-        </svg>
-
+<div class="timer">
+    <div class="text-label">
+        До конца рабочего дня осталось:
     </div>
 
-    <div class="circle">
+    <div class="time">
 
-        <div id="minute" class="title">
-            00
+        <div class="circle">
+            <div id="hour" class="title">
+                00
+            </div>
+            <div class="name">
+                Часы
+            </div>
+
+            <div class="dots hh-dot dot-red"></div>
+
+            <svg  height='100%' width='100%' class="svg">
+                <circle cx="100" cy="100" r="70"></circle>
+            </svg>
+
+            <svg  height='100%' width='100%' class="svg red" id="hh-line">
+                <circle cx="100" cy="100" r="70"></circle>
+            </svg>
+
         </div>
-        <div class="name">
-            Минуты
+
+        <div class="circle">
+
+            <div id="minute" class="title">
+                00
+            </div>
+            <div class="name">
+                Минуты
+            </div>
+
+            <div class="dots hh-dot dot-yellow"></div>
+
+            <svg  height='100%' width='100%' class="svg">
+                <circle cx="100" cy="100" r="70"></circle>
+            </svg>
+
+            <svg  height='100%' width='100%' class="svg yellow" id="mm-line">
+                <circle cx="100" cy="100" r="70"></circle>
+            </svg>
         </div>
 
-        <div class="dots hh-dot dot-yellow"></div>
+        <div class="circle">
 
-        <svg  height='100%' width='100%' class="svg">
-            <circle cx="100" cy="100" r="70"></circle>
-        </svg>
+            <div id="second" class="title">
+                00
+            </div>
+            <div class="name">
+                Секунды
+            </div>
 
-        <svg  height='100%' width='100%' class="svg yellow" id="mm-line">
-            <circle cx="100" cy="100" r="70"></circle>
-        </svg>
+            <div class="dots hh-dot dot-green"></div>
+
+            <svg  height='100%' width='100%' class="svg">
+                <circle cx="100" cy="100" r="70"></circle>
+            </svg>
+
+            <svg  height='100%' width='100%' class="svg green" id="ss-line">
+                <circle cx="100" cy="100" r="70"></circle>
+            </svg>
+        </div>
+
     </div>
-
-    <div class="circle">
-
-        <div id="second" class="title">
-            00
-        </div>
-        <div class="name">
-            Секунды
-        </div>
-
-        <div class="dots hh-dot dot-green"></div>
-
-        <svg  height='100%' width='100%' class="svg">
-            <circle cx="100" cy="100" r="70"></circle>
-        </svg>
-
-        <svg  height='100%' width='100%' class="svg green" id="ss-line">
-            <circle cx="100" cy="100" r="70"></circle>
-        </svg>
-    </div>
-
 </div>
 
 </body>
 </html>
 
 <script>
+
+    VanillaTilt.init(document.querySelectorAll('.timer'), {
+        max: 25,
+        speed: 400,
+        scale: 1.2,
+        //glare: true,
+        //"max-glare": 0.5
+    });
+
     updateUI()
 
     setInterval(() => {
