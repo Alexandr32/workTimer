@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+
+<div class="text-label">
+    До конца рабочего дня осталось:
+</div>
+
+<div class="time">
+
+    <div class="circle">
+        <div id="hour" class="title">
+            00
+        </div>
+        <div class="name">
+            Часы
+        </div>
+
+        <div class="dots hh-dot dot-red"></div>
+
+        <svg  height='100%' width='100%' class="svg">
+            <circle cx="100" cy="100" r="70"></circle>
+        </svg>
+
+        <svg  height='100%' width='100%' class="svg red" id="hh-line">
+            <circle cx="100" cy="100" r="70"></circle>
+        </svg>
+
+    </div>
+
+    <div class="circle">
+
+        <div id="minute" class="title">
+            00
+        </div>
+        <div class="name">
+            Минуты
+        </div>
+
+        <div class="dots hh-dot dot-yellow"></div>
+
+        <svg  height='100%' width='100%' class="svg">
+            <circle cx="100" cy="100" r="70"></circle>
+        </svg>
+
+        <svg  height='100%' width='100%' class="svg yellow" id="mm-line">
+            <circle cx="100" cy="100" r="70"></circle>
+        </svg>
+    </div>
+
+    <div class="circle">
+
+        <div id="second" class="title">
+            00
+        </div>
+        <div class="name">
+            Секунды
+        </div>
+
+        <div class="dots hh-dot dot-green"></div>
+
+        <svg  height='100%' width='100%' class="svg">
+            <circle cx="100" cy="100" r="70"></circle>
+        </svg>
+
+        <svg  height='100%' width='100%' class="svg green" id="ss-line">
+            <circle cx="100" cy="100" r="70"></circle>
+        </svg>
+    </div>
+
+</div>
+
+</body>
+</html>
+
+<script>
+    updateUI()
+
+    setInterval(() => {
+        updateUI()
+    }, 1000)
+
+    function updateUI() {
+        const hourElement = document.getElementById('hour')
+        const minuteElement = document.getElementById('minute')
+        const secondElement = document.getElementById('second')
+
+        const currentHourElement = new Date().getHours()
+        const currentMinuteElement = new Date().getMinutes()
+        const currentSecondElement = new Date().getSeconds()
+
+        hourElement.innerHTML = currentHourElement
+        minuteElement.innerHTML = currentMinuteElement
+        secondElement.innerHTML = currentSecondElement
+
+        const hhLine = document.getElementById('hh-line')
+        const mmLine = document.getElementById('mm-line')
+        const ssLine = document.getElementById('ss-line')
+
+        hhLine.style.strokeDashoffset = 440 - (440 * currentHourElement) / 12
+        mmLine.style.strokeDashoffset = 440 - (440 * currentMinuteElement) / 60
+        ssLine.style.strokeDashoffset = 440 - (440 * currentSecondElement) / 60
+
+        const dotRed = document.getElementsByClassName('dot-red')[0]
+        const dotYellow = document.getElementsByClassName('dot-yellow')[0]
+        const dotGreen = document.getElementsByClassName('dot-green')[0]
+
+        dotRed.style.transform = `rotate(${currentHourElement * 30}deg)`
+        dotYellow.style.transform = `rotate(${currentMinuteElement * 6}deg)`
+        dotGreen.style.transform = `rotate(${currentSecondElement * 6}deg)`
+    }
+
+</script>
