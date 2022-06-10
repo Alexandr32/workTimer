@@ -19,6 +19,7 @@ body {
     margin: 50px;
     background: #2f363e;
     border: #191919 solid;
+    z-index: 1000;
 }
 
 .text-label {
@@ -121,29 +122,29 @@ body {
     box-shadow: 0 0 20px yellow;
 }
 
-i {
+.drop {
     position: absolute;
-    height: 200px;
-    background: linear-gradient(transparent, #fff);
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    animation: animate-rain 5s linear infinite;
+    height: 300px;
+    background: linear-gradient(transparent, cornflowerblue);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    animation: animate-rain 10s linear infinite;
 }
-i:nth-child(3n+1) {
-    background: linear-gradient(transparent, #0ff);
+.drop:nth-child(3n+1) {
+    background: linear-gradient(transparent, dodgerblue);
 }
-i:nth-child(3n+2) {
-    background: linear-gradient(transparent, #0f0);
+.drop:nth-child(3n+2) {
+    background: linear-gradient(transparent, cornflowerblue);
 }
-i:nth-child(3n+3) {
-    background: linear-gradient(transparent, #f00);
+.drop:nth-child(3n+3) {
+    background: linear-gradient(transparent, darkslateblue);
 }
 
 @keyframes animate-rain {
     0% {
-        transform: translateY(-200px);
+        transform: translateY(-100vh);
     }
     100% {
-        transform: translateY(calc(100vh + 200px));
+        transform: translateY(calc(100vh + 300px));
     }
 }
