@@ -8,6 +8,8 @@
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script type="text/javascript" src="vanilla-tilt.js"></script>
+    <script type="text/javascript" src="moment.js"></script>
+    <script type="text/javascript" src="moment-with-locales.js"></script>
 </head>
 <body>
 
@@ -94,69 +96,102 @@
         max: 25,
         speed: 400,
         scale: 1.2,
-        //glare: true,
-        //"max-glare": 0.5
     });
 
-    updateUI()
+    class Timer {
+        constructor(hourElement, minuteElement, secondElement) {
+            this.hourElement = hourElement
+            this.minuteElement = minuteElement
+            this.secondElement = secondElement
+        }
 
-    setInterval(() => {
-        updateUI()
-    }, 1000)
+        updateUI() {
+            //const hourElement = document.getElementById('hour')
+            //const minuteElement = document.getElementById('minute')
+            //const secondElement = document.getElementById('second')
 
-    function updateUI() {
-        const hourElement = document.getElementById('hour')
-        const minuteElement = document.getElementById('minute')
-        const secondElement = document.getElementById('second')
+            const now  = moment(new Date());
+            const then = moment(new Date());
+            then.set({
+                hour:   17,
+                minute: 30,
+            });
 
-        const currentHourElement = new Date().getHours()
-        const currentMinuteElement = new Date().getMinutes()
-        const currentSecondElement = new Date().getSeconds()
+            const ms = now.diff(then);
+            const diff = moment.duration(ms);
 
-        hourElement.innerHTML = currentHourElement
-        minuteElement.innerHTML = currentMinuteElement
-        secondElement.innerHTML = currentSecondElement
+            //const currentHour = new Date().getHours()
+            const currentHour = diff.hours()
+            //const currentMinute = new Date().getMinutes()
+            const currentMinute = diff.minutes()
+            //const currentSecond = new Date().getSeconds()
+            const currentSecond = diff.seconds()
 
-        const hhLine = document.getElementById('hh-line')
-        const mmLine = document.getElementById('mm-line')
-        const ssLine = document.getElementById('ss-line')
+            this.hourElement.innerHTML = currentHour
+            this.minuteElement.innerHTML = currentMinute
+            this.secondElement.innerHTML = currentSecond
 
-        hhLine.style.strokeDashoffset = 440 - (440 * currentHourElement) / 12
-        mmLine.style.strokeDashoffset = 440 - (440 * currentMinuteElement) / 60
-        ssLine.style.strokeDashoffset = 440 - (440 * currentSecondElement) / 60
+            const hhLine = document.getElementById('hh-line')
+            const mmLine = document.getElementById('mm-line')
+            const ssLine = document.getElementById('ss-line')
 
-        const dotRed = document.getElementsByClassName('dot-red')[0]
-        const dotYellow = document.getElementsByClassName('dot-yellow')[0]
-        const dotGreen = document.getElementsByClassName('dot-green')[0]
+            hhLine.style.strokeDashoffset = 440 - (440 * currentHour) / 12
+            mmLine.style.strokeDashoffset = 440 - (440 * currentMinute) / 60
+            ssLine.style.strokeDashoffset = 440 - (440 * currentSecond) / 60
 
-        dotRed.style.transform = `rotate(${currentHourElement * 30}deg)`
-        dotYellow.style.transform = `rotate(${currentMinuteElement * 6}deg)`
-        dotGreen.style.transform = `rotate(${currentSecondElement * 6}deg)`
-    }
+            const dotRed = document.getElementsByClassName('dot-red')[0]
+            const dotYellow = document.getElementsByClassName('dot-yellow')[0]
+            const dotGreen = document.getElementsByClassName('dot-green')[0]
 
-    rain()
-
-    function rain() {
-        const body = document.querySelector('body')
-        const amount = 80
-
-        for (let i = 0; i < amount; i++) {
-
-            const drop = templateDrop.content.cloneNode(true).children[0]
-
-            const size = Math.random() * 5
-            const posX = Math.floor(Math.random() * window.innerWidth)
-            const delay = Math.random() * -20
-            const duration = Math.random() * -20
-
-            drop.style.width = `${0.2 + size}px`
-            drop.style.left = `${posX}px`
-            drop.style.animationDelay = `${delay}s`
-            drop.style.animationDuration = `1${duration}s`
-
-            body.append(drop)
+            dotRed.style.transform = `rotate(${currentHour * 30}deg)`
+            dotYellow.style.transform = `rotate(${currentMinute * 6}deg)`
+            dotGreen.style.transform = `rotate(${currentSecond * 6}deg)`
         }
     }
+
+    class Rain {
+
+        constructor(mainElement, templateDrop) {
+            const amount = 80
+
+            for (let i = 0; i < amount; i++) {
+
+                const drop = templateDrop.content.cloneNode(true).children[0]
+
+                const size = Math.random() * 5
+                const posX = Math.floor(Math.random() * window.innerWidth)
+                const delay = Math.random() * -20
+                const duration = Math.random() * -20
+
+                drop.style.width = `${0.2 + size}px`
+                drop.style.left = `${posX}px`
+                drop.style.animationDelay = `${delay}s`
+                drop.style.animationDuration = `1${duration}s`
+
+                mainElement.append(drop)
+            }
+
+        }
+    }
+
+    function main() {
+        const timer = new Timer(
+            document.getElementById('hour'),
+            document.getElementById('minute'),
+            document.getElementById('second'),
+        )
+
+        timer.updateUI()
+
+        setInterval(() => {
+            timer.updateUI()
+        }, 1000)
+
+        const body = document.querySelector('body')
+        new Rain(body, templateDrop)
+    }
+
+    main()
 
 
 </script>
