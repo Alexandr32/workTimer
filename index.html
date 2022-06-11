@@ -179,13 +179,33 @@
         }
     }
 
+    class SettingService {
+
+        #isDarkThemKey = 'isDarkThem'
+
+        isDarkThem() {
+            return localStorage.key(this.#isDarkThemKey) || false
+        }
+
+        darkThemOn() {
+            localStorage.setItem(this.#isDarkThemKey, 'true');
+        }
+
+        darkThemOff() {
+            localStorage.removeItem(this.#isDarkThemKey);
+        }
+    }
+
     class SwitcherThem {
 
         isDarkThem = true
 
-        constructor(elementArray, clickElement, labelElement) {
+        constructor(elementArray, clickElement, labelElement, settingService) {
             this.elementArray = elementArray
             this.labelElement = labelElement
+            this.settingService = settingService
+
+            this.isDarkThem = settingService.isDarkThem()
 
             this.switcher()
 
@@ -202,10 +222,13 @@
                     item.classList.remove("light-them");
                     item.classList.add("dark-them");
                     this.labelElement.innerHTML = 'Темная'
+                    this.settingService.darkThemOn()
+
                 } else {
                     item.classList.remove("dark-them");
                     item.classList.add("light-them");
                     this.labelElement.innerHTML = 'Лайт'
+                    this.settingService.darkThemOff()
                 }
             })
 
@@ -242,7 +265,9 @@
             timerElement,
         ]
 
-        new SwitcherThem(elementsArray, switcherThemElement, switcherThemElement)
+        const settingService = new SettingService()
+
+        new SwitcherThem(elementsArray, switcherThemElement, switcherThemElement, settingService)
     }
 
     main()
