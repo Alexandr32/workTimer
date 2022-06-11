@@ -106,9 +106,6 @@
         }
 
         updateUI() {
-            //const hourElement = document.getElementById('hour')
-            //const minuteElement = document.getElementById('minute')
-            //const secondElement = document.getElementById('second')
 
             const now  = moment(new Date());
             const then = moment(new Date());
@@ -120,11 +117,10 @@
             const ms = now.diff(then);
             const diff = moment.duration(ms);
 
-            //const currentHour = new Date().getHours()
             const currentHour = diff.hours()
-            //const currentMinute = new Date().getMinutes()
+
             const currentMinute = diff.minutes()
-            //const currentSecond = new Date().getSeconds()
+
             const currentSecond = diff.seconds()
 
             this.hourElement.innerHTML = currentHour
@@ -151,12 +147,17 @@
 
     class Rain {
 
-        constructor(mainElement, templateDrop) {
-            const amount = 80
+        constructor(mainElement, templateDrop, amount) {
 
-            for (let i = 0; i < amount; i++) {
+            this.mainElement = mainElement
+            this.templateDrop = templateDrop
+            this.amount = amount || 80
+        }
 
-                const drop = templateDrop.content.cloneNode(true).children[0]
+        start() {
+            for (let i = 0; i < this.amount; i++) {
+
+                const drop = this.templateDrop.content.cloneNode(true).children[0]
 
                 const size = Math.random() * 5
                 const posX = Math.floor(Math.random() * window.innerWidth)
@@ -168,9 +169,8 @@
                 drop.style.animationDelay = `${delay}s`
                 drop.style.animationDuration = `1${duration}s`
 
-                mainElement.append(drop)
+                this.mainElement.append(drop)
             }
-
         }
     }
 
@@ -188,7 +188,8 @@
         }, 1000)
 
         const body = document.querySelector('body')
-        new Rain(body, templateDrop)
+        const rain = new Rain(body, templateDrop)
+        rain.start()
     }
 
     main()
