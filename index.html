@@ -11,11 +11,16 @@
     <script type="text/javascript" src="moment.js"></script>
     <script type="text/javascript" src="moment-with-locales.js"></script>
 </head>
-<body>
+<body class="dark-them">
 
 <template id="templateDrop">
     <div class="drop"></div>
 </template>
+
+<div class="settings">
+    <button>Время</button>
+    <button id="switcherThem">Темная</button>
+</div>
 
 <div class="timer">
     <div class="text-label">
@@ -174,6 +179,41 @@
         }
     }
 
+    class SwitcherThem {
+
+        isDarkThem = true
+
+        constructor(elementArray, clickElement, labelElement) {
+            this.elementArray = elementArray
+            this.labelElement = labelElement
+
+            this.switcher()
+
+            clickElement.addEventListener('click', () => {
+                this.isDarkThem = !this.isDarkThem
+                this.switcher()
+            })
+        }
+
+        switcher = () => {
+
+            this.elementArray.forEach((item, i) => {
+                if(this.isDarkThem) {
+                    item.classList.remove("light-them");
+                    item.classList.add("dark-them");
+                    this.labelElement.innerHTML = 'Темная'
+                } else {
+                    item.classList.remove("dark-them");
+                    item.classList.add("light-them");
+                    this.labelElement.innerHTML = 'Лайт'
+                }
+            })
+
+            this.labelElement.innerHTML = this.isDarkThem ? 'Темная' : 'Лайт'
+        }
+
+    }
+
     function main() {
         const timer = new Timer(
             document.getElementById('hour'),
@@ -190,6 +230,19 @@
         const body = document.querySelector('body')
         const rain = new Rain(body, templateDrop)
         rain.start()
+
+        const switcherThemElement = document.getElementById('switcherThem')
+        const settingsElement = document.getElementsByClassName('settings')[0]
+        const timerElement = document.getElementsByClassName('timer')[0]
+
+        const elementsArray = [
+            body,
+            switcherThemElement,
+            settingsElement,
+            timerElement,
+        ]
+
+        new SwitcherThem(elementsArray, switcherThemElement, switcherThemElement)
     }
 
     main()
