@@ -11,7 +11,12 @@ body {
     align-items: center;
     min-height: 100vh; /* Нужно переделать на растягивание по середине */
     flex-direction: column;
-    transition: all 2s ease;
+    transition: all 1s ease;
+}
+
+body:not(.light-them) {
+    background: #2f363e;
+    color: #fff;
 }
 
 button {
@@ -29,6 +34,12 @@ button {
     margin: 50px;
     border: #191919 solid;
     z-index: 1000;
+    background: white;
+    transition: all 1s ease;
+}
+.timer:not(.light-them) {
+    background: #2f363e;
+    color: #fff;
 }
 
 .text-label {
@@ -44,14 +55,11 @@ button {
 
 .name {
     z-index: 200;
-    transition: all 0.5s ease;
 }
 
 .title {
     font-size: 35px;
     z-index: 200;
-    transition: all 0.5s ease;
-
 }
 
 .circle {
@@ -171,13 +179,10 @@ button {
     font-size: 13px;
     font-weight: 100;
     transition: all 1s ease;
+    background: white;
 }
 
-.dark-them {
+.settings:not(.light-them) {
     background: #2f363e;
     color: #fff;
-}
-
-.light-them {
-    background: #E0FFFF;
 }
