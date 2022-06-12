@@ -5,6 +5,13 @@
     font-family: system-ui;
 }
 
+:root {
+    --border: #191919;
+    --textColorDarkThem: #fff;
+    --backgroundColorDarkThem: #2f363e;
+    --backgroundColorLightThem: white;
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -15,8 +22,8 @@ body {
 }
 
 body:not(.light-them) {
-    background: #2f363e;
-    color: #fff;
+    background: var(--backgroundColorDarkThem);
+    color: var(--textColorDarkThem);
 }
 
 button {
@@ -32,15 +39,15 @@ button {
 .timer {
     border-radius: 20px;
     margin: 50px;
-    border: #191919 solid;
+    border: var(--border) solid;
     z-index: 1000;
-    background: white;
+    background: var(--backgroundColorLightThem);
     transition: all 1s ease;
 }
 
 .timer:not(.light-them) {
-    background: #2f363e;
-    color: #fff;
+    background: var(--backgroundColorDarkThem);
+    color: var(--textColorDarkThem);;
 }
 
 .text-label {
@@ -83,10 +90,9 @@ button {
     bottom: 0;
     width: 100%;
     height: 100%;
-    /*fill: #2f363e;*/
     fill: transparent;
     stroke-width: 4;
-    stroke: #191919;
+    stroke: var(--border);
     transform: rotate(270deg);
 }
 
@@ -172,7 +178,7 @@ button {
 .settings {
     display: flex;
     z-index: 900;
-    border: #191919 solid;
+    border: var(--border) solid;
     position: absolute;
     top: 0;
     left: 0;
@@ -184,16 +190,16 @@ button {
     font-size: 13px;
     font-weight: 100;
     transition: all 1s ease;
-    background: white;
+    background: var(--backgroundColorLightThem);
 }
 
 .settings:not(.light-them) {
-    background: #2f363e;
-    color: #fff;
+    background: var(--backgroundColorDarkThem);
+    color: var(--textColorDarkThem);
 }
 
 .dialog-time {
-    border: #191919 solid;
+    border: var(--border) solid;
     position: absolute;
     top: 35px;
     left: 0;
@@ -202,12 +208,12 @@ button {
     border-radius: 15px;
     padding: 10px;
     transition: all 1s ease;
-    background: white;
+    background: var(--backgroundColorLightThem);
 }
 
 .dialog-time:not(.light-them) {
-    background: #2f363e;
-    color: #fff;
+    background: var(--backgroundColorDarkThem);
+    color: var(--textColorDarkThem);
 }
 
 .dialog-time input {
@@ -215,8 +221,8 @@ button {
 }
 
 .dialog-time:not(.light-them) input {
-    background: #2f363e;
-    color: #fff;
+    background: var(--backgroundColorDarkThem);
+    color: var(--textColorDarkThem);
 }
 
 .input-time {
@@ -231,21 +237,3 @@ button {
     align-items: center;
     margin-top: 10px;
 }
-
-/*#selectStartTime {
-    transition: all 1s ease;
-}*/
-
-/*#selectStartTime:not(.light-them)  {*/
-/*    background: #2f363e;*/
-/*    color: #fff;*/
-/*}*/
-
-/*#selectFinishTime {*/
-/*    transition: all 1s ease;*/
-/*}*/
-
-/*#selectFinishTime:not(.light-them) {*/
-/*    background: #2f363e;*/
-/*    color: #fff;*/
-/*}*/
