@@ -18,7 +18,7 @@
 </template>
 
 <div class="settings">
-    <button>Время</button>
+    <button id="openTimeButton">Время</button>
     <button id="switcherThem">Темная</button>
 </div>
 
@@ -35,7 +35,7 @@
     </div>
 
     <div class="dialog-button">
-        <button id="caveDialogTime">Сохранить</button>
+        <button id="saveDialogTime">Сохранить</button>
         <button id="closeDialogTime">Закрыть</button>
     </div>
 </div>
@@ -255,23 +255,79 @@
 
     }
 
-    function main() {
-        const timer = new Timer(
-            document.getElementById('hour'),
-            document.getElementById('minute'),
-            document.getElementById('second'),
-        )
+    class DialogTime {
 
-        timer.updateUI()
+        isShow = false
 
-        setInterval(() => {
-            timer.updateUI()
-        }, 1000)
+        constructor(timeObj) {
 
+            this.timeObj = timeObj
+
+            this.dialogTimeElement = document.getElementById('dialogTime')
+
+            this.selectStartTime = document.getElementById('selectStartTime')
+            this.selectStartTime.value = timeObj.startTime.toTime()
+
+            this.selectFinishTime = document.getElementById('selectFinishTime')
+            this.selectFinishTime.value = timeObj.finishTime.toTime()
+
+            this.saveDialogTime = document.getElementById('saveDialogTime')
+            this.closeDialogTime = document.getElementById('closeDialogTime')
+
+            this.saveDialogTime.addEventListener('click', () => {
+                this.save()
+            })
+
+            this.closeDialogTime.addEventListener('click', () => {
+                this.closeDialog()
+            })
+
+            this.initShowDialog()
+
+        }
+
+        initShowDialog() {
+            if(this.isShow) {
+                this.showDialog()
+            } else {
+                this.closeDialog()
+            }
+        }
+
+        closeDialog = () => {
+            this.isShow = false
+            this.dialogTimeElement.style.display = 'none'
+        }
+
+        showDialog = () => {
+            this.isShow = true
+            this.dialogTimeElement.style.display = 'inline';
+        }
+
+        save = () => {
+
+            this.closeDialog()
+
+            if(this.funcEvent) {
+                this.funcEvent(this.timeObj)
+            }
+
+        }
+
+        addEventSave(funcEvent) {
+            this.funcEvent = funcEvent
+        }
+
+    }
+
+    function addRain() {
         const body = document.querySelector('body')
         const rain = new Rain(body, templateDrop)
         rain.start()
+    }
 
+    function addSwitcherThem(settingService) {
+        const body = document.querySelector('body')
         const switcherThemElement = document.getElementById('switcherThem')
         const settingsElement = document.getElementsByClassName('settings')[0]
         const timerElement = document.getElementsByClassName('timer')[0]
@@ -289,9 +345,55 @@
             selectFinishTimeElement
         ]
 
-        const settingService = new SettingService()
+        return new SwitcherThem(elementsArray, switcherThemElement, switcherThemElement, settingService)
+    }
 
-        new SwitcherThem(elementsArray, switcherThemElement, switcherThemElement, settingService)
+    function main() {
+        const timer = new Timer(
+            document.getElementById('hour'),
+            document.getElementById('minute'),
+            document.getElementById('second'),
+        )
+
+        timer.updateUI()
+
+        setInterval(() => {
+            timer.updateUI()
+        }, 1000)
+
+        this.addRain()
+
+        const settingService = new SettingService()
+        this.addSwitcherThem(settingService)
+
+        const timeObj = {
+            startTime: {
+                hour: '08',
+                minute: '30',
+                toTime: function () {
+                    return `${this.hour}:${this.minute}`
+                }
+            },
+            finishTime: {
+                hour: '17',
+                minute: '30',
+                toTime: function () {
+                    return `${this.hour}:${this.minute}`
+                }
+            }
+        }
+
+        const dialogTime = new DialogTime(timeObj)
+
+        const openTimeButton = document.getElementById('openTimeButton')
+        openTimeButton.addEventListener('click', () => {
+            dialogTime.isShow = !dialogTime.isShow
+            dialogTime.initShowDialog()
+        })
+
+        dialogTime.addEventSave((timeObj) => {
+            console.log(timeObj)
+        })
     }
 
     main()
