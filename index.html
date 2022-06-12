@@ -22,6 +22,24 @@
     <button id="switcherThem">Темная</button>
 </div>
 
+<div id="dialogTime" class="dialog-time">
+
+    <div class="input-time">
+        <label for="selectStartTime">Дата начала рабочего дня</label>
+        <input id="selectStartTime" type="time">
+    </div>
+
+    <div class="input-time">
+        <label for="selectFinishTime">Дата окончания рабочего дня</label>
+        <input id="selectFinishTime" type="time">
+    </div>
+
+    <div class="dialog-button">
+        <button id="caveDialogTime">Сохранить</button>
+        <button id="closeDialogTime">Закрыть</button>
+    </div>
+</div>
+
 <div class="timer">
     <div class="text-label">
         До конца рабочего дня осталось:
@@ -257,12 +275,18 @@
         const switcherThemElement = document.getElementById('switcherThem')
         const settingsElement = document.getElementsByClassName('settings')[0]
         const timerElement = document.getElementsByClassName('timer')[0]
+        const dialogTimeElement = document.getElementById('dialogTime')
+        const selectStartTimeElement = document.getElementById('selectStartTime')
+        const selectFinishTimeElement = document.getElementById('selectFinishTime')
 
         const elementsArray = [
             body,
             switcherThemElement,
             settingsElement,
             timerElement,
+            dialogTimeElement,
+            selectStartTimeElement,
+            selectFinishTimeElement
         ]
 
         const settingService = new SettingService()

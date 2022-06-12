@@ -37,6 +37,7 @@ button {
     background: white;
     transition: all 1s ease;
 }
+
 .timer:not(.light-them) {
     background: #2f363e;
     color: #fff;
@@ -112,6 +113,7 @@ button {
     justify-content: center;
     z-index: 300;
 }
+
 .dots:before {
     content: '';
     top: 22px;
@@ -145,12 +147,15 @@ button {
     border-bottom-right-radius: 15px;
     animation: animate-rain 10s linear infinite;
 }
+
 .drop:nth-child(3n+1) {
     background: linear-gradient(transparent, dodgerblue);
 }
+
 .drop:nth-child(3n+2) {
     background: linear-gradient(transparent, cornflowerblue);
 }
+
 .drop:nth-child(3n+3) {
     background: linear-gradient(transparent, darkslateblue);
 }
@@ -186,3 +191,61 @@ button {
     background: #2f363e;
     color: #fff;
 }
+
+.dialog-time {
+    border: #191919 solid;
+    position: absolute;
+    top: 35px;
+    left: 0;
+    z-index: 900;
+    font-size: 13px;
+    border-radius: 15px;
+    padding: 10px;
+    transition: all 1s ease;
+    background: white;
+}
+
+.dialog-time:not(.light-them) {
+    background: #2f363e;
+    color: #fff;
+}
+
+.dialog-time input {
+    transition: all 1s ease;
+}
+
+.dialog-time:not(.light-them) input {
+    background: #2f363e;
+    color: #fff;
+}
+
+.input-time {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.dialog-button {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10px;
+}
+
+/*#selectStartTime {
+    transition: all 1s ease;
+}*/
+
+/*#selectStartTime:not(.light-them)  {*/
+/*    background: #2f363e;*/
+/*    color: #fff;*/
+/*}*/
+
+/*#selectFinishTime {*/
+/*    transition: all 1s ease;*/
+/*}*/
+
+/*#selectFinishTime:not(.light-them) {*/
+/*    background: #2f363e;*/
+/*    color: #fff;*/
+/*}*/
