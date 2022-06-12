@@ -202,7 +202,13 @@
         #isDarkThemKey = 'isDarkThem'
 
         isDarkThem() {
-            return localStorage.key(this.#isDarkThemKey) || false
+
+            const value = localStorage.key(this.#isDarkThemKey)
+            if (typeof value === 'undefined') {
+                return true
+            }
+
+            return localStorage.key(this.#isDarkThemKey)
         }
 
         darkThemOn() {
