@@ -19,7 +19,10 @@
 
 <div class="settings">
     <button id="openTimeButton">Время</button>
-    <button id="switcherThem">Темная</button>
+    <div>
+        <span>Тема: </span>
+        <button id="switcherThem">темная</button>
+    </div>
 </div>
 
 <div id="dialogTime" class="dialog-time">
@@ -41,7 +44,7 @@
 </div>
 
 <div class="timer">
-    <div class="text-label">
+    <div id="infoTitle" class="text-label">
         До конца рабочего дня осталось:
     </div>
 
@@ -122,10 +125,13 @@
     });
 
     class Timer {
-        constructor(hourElement, minuteElement, secondElement) {
+
+        constructor(hourElement, minuteElement, secondElement, infoTitle, timeObj) {
             this.hourElement = hourElement
             this.minuteElement = minuteElement
             this.secondElement = secondElement
+            this.infoTitle = infoTitle
+            this.timeObj = timeObj
         }
 
         updateUI() {
@@ -133,11 +139,30 @@
             const now  = moment(new Date());
             const then = moment(new Date());
             then.set({
-                hour:   17,
-                minute: 30,
+                hour:   this.timeObj.finishTime.hour,
+                minute: this.timeObj.finishTime.minute,
+                second: 0
             });
 
-            const ms = now.diff(then);
+            if(now < then) {
+                this.updateFinishTime(now, then)
+            } else {
+
+                then.set({
+                    hour:   this.timeObj.startTime.hour > 12 ? this.timeObj.startTime.hour : this.timeObj.startTime.hour  + 24,
+                    minute: this.timeObj.startTime.minute,
+                    second: 0
+                });
+                this.updateStartTime(now, then)
+            }
+
+
+        }
+
+        updateStartTime(now, then) {
+            this.infoTitle.innerText = 'До начала рабочего дня осталось:'
+
+            const ms = then.diff(now);
             const diff = moment.duration(ms);
 
             const currentHour = diff.hours()
@@ -165,6 +190,40 @@
             dotRed.style.transform = `rotate(${currentHour * 30}deg)`
             dotYellow.style.transform = `rotate(${currentMinute * 6}deg)`
             dotGreen.style.transform = `rotate(${currentSecond * 6}deg)`
+        }
+
+        updateFinishTime(now, then) {
+
+            this.infoTitle.innerText = 'До конца рабочего дня осталось:'
+
+            const ms = then.diff(now);
+            const diff = moment.duration(ms);
+
+            const currentHour = diff.hours()
+
+            const currentMinute = diff.minutes()
+
+            const currentSecond = diff.seconds()
+
+            this.hourElement.innerHTML = currentHour
+            this.minuteElement.innerHTML = currentMinute
+            this.secondElement.innerHTML = currentSecond
+
+            const hhLine = document.getElementById('hh-line')
+            const mmLine = document.getElementById('mm-line')
+            const ssLine = document.getElementById('ss-line')
+
+            hhLine.style.strokeDashoffset = 440 + (440 * currentHour) / 12
+            mmLine.style.strokeDashoffset = 440 + (440 * currentMinute) / 60
+            ssLine.style.strokeDashoffset = 440 + (440 * currentSecond) / 60
+
+            const dotRed = document.getElementsByClassName('dot-red')[0]
+            const dotYellow = document.getElementsByClassName('dot-yellow')[0]
+            const dotGreen = document.getElementsByClassName('dot-green')[0]
+
+            dotRed.style.transform = `rotate(${-currentHour * 30}deg)`
+            dotYellow.style.transform = `rotate(${-currentMinute * 6}deg)`
+            dotGreen.style.transform = `rotate(${-currentSecond * 6}deg)`
         }
     }
 
@@ -275,18 +334,18 @@
                 if(this.isDarkThem) {
                     item.classList.remove("light-them");
                     item.classList.add("dark-them");
-                    this.labelElement.innerHTML = 'Темная'
+                    this.labelElement.innerHTML = 'темная'
                     this.settingService.darkThemOn()
 
                 } else {
                     item.classList.remove("dark-them");
                     item.classList.add("light-them");
-                    this.labelElement.innerHTML = 'Лайт'
+                    this.labelElement.innerHTML = 'лайт'
                     this.settingService.darkThemOff()
                 }
             })
 
-            this.labelElement.innerHTML = this.isDarkThem ? 'Темная' : 'Лайт'
+            this.labelElement.innerHTML = this.isDarkThem ? 'темная' : 'лайт'
         }
 
     }
@@ -409,10 +468,23 @@
     }
 
     function main() {
+
+        const settingService = new SettingService()
+
+        const startTime = settingService.getStartTime()
+        const finishTime = settingService.getFinishTime()
+
+        const timeObj = {
+            startTime: new Time(startTime),
+            finishTime: new Time(finishTime)
+        }
+
         const timer = new Timer(
             document.getElementById('hour'),
             document.getElementById('minute'),
             document.getElementById('second'),
+            document.getElementById('infoTitle'),
+            timeObj
         )
 
         timer.updateUI()
@@ -423,16 +495,7 @@
 
         this.addRain()
 
-        const settingService = new SettingService()
         this.addSwitcherThem(settingService)
-
-        const startTime = settingService.getStartTime()
-        const finishTime = settingService.getFinishTime()
-
-        const timeObj = {
-            startTime: new Time(startTime),
-            finishTime: new Time(finishTime)
-        }
 
         const dialogTime = new DialogTime(timeObj)
 
@@ -447,6 +510,7 @@
             const finishTime = timeObj.finishTime.toTime()
             settingService.setStartTime(startTime)
             settingService.setFinishTime(finishTime)
+            timer.timeObj = timeObj
         })
     }
 

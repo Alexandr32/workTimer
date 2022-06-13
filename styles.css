@@ -193,6 +193,10 @@ button {
     background: var(--backgroundColorLightThem);
 }
 
+.settings > span {
+    transition: all 1s ease;
+}
+
 .settings:not(.light-them) {
     background: var(--backgroundColorDarkThem);
     color: var(--textColorDarkThem);
