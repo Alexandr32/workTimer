@@ -200,15 +200,17 @@
     class SettingService {
 
         #isDarkThemKey = 'isDarkThem'
+        #startTimeKey = 'startTime'
+        #finishTimeKey = 'finishTime'
 
         isDarkThem() {
 
-            const value = localStorage.key(this.#isDarkThemKey)
-            if (typeof value === 'undefined') {
+            const value = localStorage.getItem(this.#isDarkThemKey)
+            if (typeof value === 'undefined'|| value === null) {
                 return true
             }
 
-            return localStorage.key(this.#isDarkThemKey)
+            return value
         }
 
         darkThemOn() {
@@ -217,6 +219,34 @@
 
         darkThemOff() {
             localStorage.removeItem(this.#isDarkThemKey);
+        }
+
+        getStartTime() {
+            const value = localStorage.getItem(this.#startTimeKey)
+
+            if (typeof value === 'undefined' || value === null) {
+                return '08:30'
+            }
+
+            return value
+        }
+
+        setStartTime(value) {
+            localStorage.setItem(this.#startTimeKey, value.toString());
+        }
+
+        getFinishTime() {
+            const value = localStorage.getItem(this.#finishTimeKey)
+
+            if (typeof value === 'undefined' || value === null) {
+                return '17:30'
+            }
+
+            return value
+        }
+
+        setFinishTime(value) {
+            localStorage.setItem(this.#finishTimeKey, value.toString());
         }
     }
 
@@ -261,6 +291,20 @@
 
     }
 
+    class Time {
+        constructor(fullTime) {
+
+            const value = fullTime.split(':')
+
+            this.hour = value[0]
+            this.minute = value[1]
+        }
+
+        toTime() {
+            return `${this.hour}:${this.minute}`
+        }
+    }
+
     class DialogTime {
 
         isShow = false
@@ -272,10 +316,10 @@
             this.dialogTimeElement = document.getElementById('dialogTime')
 
             this.selectStartTime = document.getElementById('selectStartTime')
-            this.selectStartTime.value = timeObj.startTime.toTime()
 
             this.selectFinishTime = document.getElementById('selectFinishTime')
-            this.selectFinishTime.value = timeObj.finishTime.toTime()
+
+            this.#setValueTime()
 
             this.saveDialogTime = document.getElementById('saveDialogTime')
             this.closeDialogTime = document.getElementById('closeDialogTime')
@@ -289,7 +333,11 @@
             })
 
             this.initShowDialog()
+        }
 
+        #setValueTime() {
+            this.selectStartTime.value = this.timeObj?.startTime?.toTime()
+            this.selectFinishTime.value = this.timeObj?.finishTime?.toTime()
         }
 
         initShowDialog() {
@@ -302,6 +350,7 @@
 
         closeDialog = () => {
             this.isShow = false
+            this.#setValueTime()
             this.dialogTimeElement.style.display = 'none'
         }
 
@@ -312,12 +361,17 @@
 
         save = () => {
 
-            this.closeDialog()
+            if(!this.selectStartTime.value || !this.selectFinishTime.value) {
+                return
+            }
 
             if(this.funcEvent) {
+                this.timeObj.startTime = new Time(this.selectStartTime.value)
+                this.timeObj.finishTime = new Time(this.selectFinishTime.value)
                 this.funcEvent(this.timeObj)
             }
 
+            this.closeDialog()
         }
 
         addEventSave(funcEvent) {
@@ -372,21 +426,12 @@
         const settingService = new SettingService()
         this.addSwitcherThem(settingService)
 
+        const startTime = settingService.getStartTime()
+        const finishTime = settingService.getFinishTime()
+
         const timeObj = {
-            startTime: {
-                hour: '08',
-                minute: '30',
-                toTime: function () {
-                    return `${this.hour}:${this.minute}`
-                }
-            },
-            finishTime: {
-                hour: '17',
-                minute: '30',
-                toTime: function () {
-                    return `${this.hour}:${this.minute}`
-                }
-            }
+            startTime: new Time(startTime),
+            finishTime: new Time(finishTime)
         }
 
         const dialogTime = new DialogTime(timeObj)
@@ -398,7 +443,10 @@
         })
 
         dialogTime.addEventSave((timeObj) => {
-            console.log(timeObj)
+            const startTime = timeObj.startTime.toTime()
+            const finishTime = timeObj.finishTime.toTime()
+            settingService.setStartTime(startTime)
+            settingService.setFinishTime(finishTime)
         })
     }
 
