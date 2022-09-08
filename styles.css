@@ -241,3 +241,13 @@ button {
     align-items: center;
     margin-top: 10px;
 }
+
+@media screen and (max-width: 730px) {
+    .time {
+        display: flex;
+        gap: 40px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
